@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 
 export default defineConfig({
-  base: '/Task-manager/',
+  base: '/',
   plugins: [react()],
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],

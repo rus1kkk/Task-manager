@@ -1,0 +1,18 @@
+.task-card {
+  transition: transform 0.3s ease;
+}
+
+.task-card:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.task-card-icon{
+  transition: transform 0.3s ease;
+}
+
+.task-card-icon:hover{
+  transform: scale(1.1);
+  cursor: pointer;
+}
+

@@ -1,96 +1,75 @@
-import  { useState } from "react";
 import { Flex } from "@mantine/core";
 import TaskItem from "./TaskItem";
-import type { Task } from "../types/types";
-
-const initialTasks: Task[] = [
-  {
-    id: 1,
-    title: "Fix bug that only happens when you stare at the screen",
-    status: "To Do",
-    category: "Bug",
-    description: "Apparently the bug is shy and disappears when observed.",
-    priority: "High",
-  },
-  {
-    id: 2,
-    title: "Add feature: Auto-coffee maker integration",
-    status: "In Progress",
-    category: "Feature",
-    description: "Because coding without coffee is just sad.",
-    priority: "Medium",
-  },
-  {
-    id: 3,
-    title: "Write docs nobody will read",
-    status: "Done",
-    category: "Documentation",
-    description: "But hey, it looks professional!",
-    priority: "Low",
-  },
-  {
-    id: 4,
-    title: "Refactor spaghetti code into lasagna layers",
-    status: "To Do",
-    category: "Refactor",
-    description: "More delicious and easier to digest.",
-    priority: "High",
-  },
-  {
-    id: 5,
-    title: "Test if the app breaks when you press all buttons at once",
-    status: "In Progress",
-    category: "Test",
-    description: "Because chaos is the best QA strategy.",
-    priority: "Medium",
-  },
-  {
-    id: 6,
-    title: "Fix typo in README that causes existential crisis",
-    status: "To Do",
-    category: "Bug",
-    description: "One letter can change everything.",
-    priority: "Low",
-  },
-  {
-    id: 7,
-    title: "Add Easter egg: Make app play 'Never Gonna Give You Up' on error",
-    status: "To do",
-    category: "Feature",
-    description: "Rickroll your users with style.",
-    priority: "Low",
-  },
-];
+import { useTaskStore } from "../store/taskStore";
+import AddTaskCard from "./AddTaskCard";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import type { DropResult } from "@hello-pangea/dnd";
 
 function TaskList() {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const tasks = useTaskStore((state) => state.tasks);
+  const deleteTask = useTaskStore((state) => state.deleteTask);
+  const updateTask = useTaskStore((state) => state.updateTask);
+  const moveTask = useTaskStore((state) => state.moveTask);
 
-  const handleDelete = (id: number) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
-  };
-
-  const handleSaveTask = (updatedTask: Task) => {
-    setTasks((prev) => prev.map((task) => task.id === updatedTask.id ? updatedTask : task));
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    if (result.source.index === result.destination.index) return;
+    moveTask(result.source.index, result.destination.index);
   };
 
   return (
-    <Flex
-      mih={50}
-      gap="md"
-      justify="center"
-      align="center"
-      direction="row"
-      wrap="wrap"
-    >
-      {tasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          onDelete={() => handleDelete(task.id)}
-          onSave={handleSaveTask}
-        />
-      ))}
-    </Flex>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Flex
+        mih={50}
+        gap="md"
+        justify="center"
+        align="center"
+        direction="row"
+        wrap="wrap"
+      >
+        <Droppable droppableId="task-list" direction="horizontal">
+          {(provided) => (
+            <Flex
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              gap="md"
+              direction="row"
+              wrap="wrap"
+              style={{
+                flex: 1,
+                maxWidth: `calc(3 * 375px + 2 * 16px)`, // 3 карточки + 2 gap'а
+                minWidth: 0,
+              }}
+            >
+                      <AddTaskCard />
+              {tasks.map((task, index) => (
+                <Draggable key={task.id} draggableId={String(task.id)} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{
+                        ...provided.draggableProps.style,
+                        opacity: snapshot.isDragging ? 0.7 : 1,
+                        margin: 0,
+                      }}
+                    >
+                      <TaskItem
+                        task={task}
+                        onDelete={() => deleteTask(String(task.id))}
+                        onSave={(updatedTask) => updateTask(String(task.id), updatedTask)}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </Flex>
+          )}
+        </Droppable>
+      </Flex>
+    </DragDropContext>
   );
 }
 

@@ -11,16 +11,25 @@ interface TaskModalProps {
 
 function TaskModal({ opened, onClose, task, onSave }: TaskModalProps) {
   const [editedTask, setEditedTask] = React.useState<Task>(task);
+  const [error, setError] = React.useState<string>("");
 
   React.useEffect(() => {
     setEditedTask(task);
+    setError("");
   }, [task]);
 
   const handleChange = (field: keyof Task, value: string) => {
     setEditedTask((prev) => ({ ...prev, [field]: value }));
+    if (field === "title" && value.trim() !== "") {
+      setError("");
+    }
   };
 
   const handleSave = () => {
+    if (!editedTask.title.trim()) {
+      setError("Title is required");
+      return;
+    }
     onSave(editedTask);
     onClose();
   };
@@ -38,6 +47,8 @@ function TaskModal({ opened, onClose, task, onSave }: TaskModalProps) {
         value={editedTask.title}
         onChange={(e) => handleChange("title", e.currentTarget.value)}
         mb="sm"
+        required
+        error={error}
       />
       <Select
         label="Status"
@@ -84,7 +95,7 @@ function TaskModal({ opened, onClose, task, onSave }: TaskModalProps) {
         <Button variant="default" onClick={onClose}>
           Close
         </Button>
-        <Button onClick={handleSave} color="blue">
+        <Button onClick={handleSave} color="blue" disabled={!editedTask.title.trim()}>
           Save
         </Button>
       </Group>

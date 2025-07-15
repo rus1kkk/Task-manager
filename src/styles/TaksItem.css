@@ -1,18 +1,19 @@
 .task-card {
-  transition: transform 0.3s ease;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  background: #fff;
+  border-radius: 16px;
+  cursor: pointer;
 }
 
 .task-card:hover {
-  transform: scale(1.05);
-  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
 }
 
-.task-card-icon{
-  transition: transform 0.3s ease;
+.task-card-icon {
+  transition: background 0.2s;
 }
 
-.task-card-icon:hover{
-  transform: scale(1.1);
-  cursor: pointer;
-}
-
+.task-card-icon:hover {
+  background: #f0f4fa;
+} 

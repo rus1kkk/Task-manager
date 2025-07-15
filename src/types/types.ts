@@ -1,8 +1,9 @@
 export interface Task {
-  id: number;
+  id: string;
   title: string;
   status: string;
   category: string;
   priority: string;
+  createdAt: string;
   description?: string;
 }

@@ -1,18 +1,11 @@
 {
-  "compilerOptions": {
+  "files": [],
+   "compilerOptions": {
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "target": "esnext",
     "module": "esnext",
-    "baseUrl": "./src",
-    "paths": {
-      "@app/*": ["app/*"],
-      "@widgets/*": ["widgets/*"],
-      "@entities/*": ["entities/*"],
-      "@shared/*": ["shared/*"],
-      "@pages/*": ["pages/*"]
-    }
-  },
+   },
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

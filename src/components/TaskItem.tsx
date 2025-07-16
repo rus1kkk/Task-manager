@@ -1,3 +1,4 @@
+import React from "react";
 import { Card, Text, ActionIcon, Group } from "@mantine/core";
 import BadgeItem from "./BadgeItem";
 import { IconTrash, IconAdjustments, IconPlus } from "@tabler/icons-react";

@@ -1,5 +1,7 @@
+import React from "react";
 import { Flex } from "@mantine/core";
 import TaskItem from "./TaskItem";
+
 import { useTaskStore } from "../store/taskStore";
 import AddTaskCard from "./AddTaskCard";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";

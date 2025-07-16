@@ -1,7 +1,9 @@
+import React from "react";
 import { Card, ActionIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/TaksItem.css";
+
 
 function AddTaskCard() {
   const navigate = useNavigate();
